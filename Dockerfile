@@ -19,8 +19,8 @@ COPY . .
 # Build the application in release mode
 RUN cargo build --release
 
-# Use a lightweight image for the runtime
-FROM debian:bullseye-slim
+# Use a more recent Debian version to ensure GLIBC compatibility
+FROM debian:bookworm-slim
 
 # Install required libraries
 RUN apt-get update && apt-get install -y \
@@ -37,7 +37,7 @@ COPY --from=builder /app/target/release/simple_server /app/simple_server
 RUN useradd -m rustuser
 USER rustuser
 
-# Expose the application port (replace with your app's actual port)
+# Expose the application port
 EXPOSE 3000
 
 # Run the application
