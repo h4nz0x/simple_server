@@ -15,8 +15,8 @@ async fn main() {
         .route("/health", get(health_check))  // Health check endpoint
         .route("/greet", post(greet));        // Greeting endpoint with JSON payload
 
-    // Define the address to listen on
-    let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
+    // Define the address to listen on (binding to all interfaces)
+    let addr = "0.0.0.0:8000".parse::<SocketAddr>().unwrap();
     println!("Listening on http://{}", addr);
 
     // Run the server using hyper

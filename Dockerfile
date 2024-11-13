@@ -38,7 +38,7 @@ RUN useradd -m rustuser
 USER rustuser
 
 # Expose the application port
-EXPOSE 3000
+EXPOSE 8000
 
 # Run the application
 CMD ["./simple_server"]
