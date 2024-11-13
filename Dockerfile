@@ -31,7 +31,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 # Copy the compiled binary from the build stage
-COPY --from=builder /app/target/release/my-rust-app /app/my-rust-app
+COPY --from=builder /app/target/release/simple_server /app/simple_server
 
 # Set the application to run as a non-root user
 RUN useradd -m rustuser
@@ -41,4 +41,4 @@ USER rustuser
 EXPOSE 3000
 
 # Run the application
-CMD ["./my-rust-app"]
+CMD ["./simple_server"]
