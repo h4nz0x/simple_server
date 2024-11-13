@@ -38,7 +38,7 @@ RUN useradd -m rustuser
 USER rustuser
 
 # Expose the application port (replace with your app's actual port)
-EXPOSE 8080
+EXPOSE 3000
 
 # Run the application
 CMD ["./my-rust-app"]

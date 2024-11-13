@@ -30,6 +30,8 @@ The server runs on `localhost:3000` by default.
 
 ### Using Docker
 
+The project includes a multi-stage Dockerfile that builds the application in a builder stage and creates a minimal runtime image.
+
 1. Make sure you have Docker installed
 2. Clone this repository
 3. Build the Docker image:
