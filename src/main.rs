@@ -1,6 +1,6 @@
 use axum::{
     routing::{get, post},
-    http::{StatusCode, Request, Response},
+    http::StatusCode,
     Router, Json,
 };
 use tower_http::trace::{TraceLayer, DefaultMakeSpan, DefaultOnResponse};
