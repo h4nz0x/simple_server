@@ -1,23 +1,37 @@
 use axum::{
     routing::{get, post},
-    http::StatusCode,
+    http::{StatusCode, Request, Response},
     Router, Json,
 };
-use hyper::Server;
+use tower_http::trace::{TraceLayer, DefaultMakeSpan, DefaultOnResponse};
+use tracing::{info, Level};
+use tracing_subscriber::FmtSubscriber;
 use serde::{Deserialize, Serialize};
 use std::net::SocketAddr;
+use hyper::Server;
 
 #[tokio::main]
 async fn main() {
+    // Set up the tracing subscriber for logging
+    let subscriber = FmtSubscriber::builder()
+        .with_max_level(Level::INFO)
+        .finish();
+    tracing::subscriber::set_global_default(subscriber).expect("setting default subscriber failed");
+
     // Define routes
     let app = Router::new()
         .route("/", get(root))                // Root endpoint
         .route("/health", get(health_check))  // Health check endpoint
-        .route("/greet", post(greet));        // Greeting endpoint with JSON payload
+        .route("/greet", post(greet))        // Greeting endpoint with JSON payload
+        .layer(
+            TraceLayer::new_for_http()
+                .make_span_with(DefaultMakeSpan::new().include_headers(true)) // log request headers
+                .on_response(DefaultOnResponse::new().include_headers(true)) // log response headers
+        );
 
-    // Define the address to listen on (binding to all interfaces)
-    let addr = "0.0.0.0:8000".parse::<SocketAddr>().unwrap();
-    println!("Listening on http://{}", addr);
+    // Define the address to listen on
+    let addr = SocketAddr::from(([127, 0, 0, 1], 8000)); // Bind to all Localhost
+    info!("Listening on http://{}", addr);
 
     // Run the server using hyper
     Server::bind(&addr)
